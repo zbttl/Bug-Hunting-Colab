@@ -5,6 +5,7 @@ import uuid
 import re
 from subprocess import Popen,PIPE
 import shutil,urllib.request,subprocess
+import stat
 
 HOME = os.path.expanduser("~")
 CWD = os.getcwd()
@@ -195,6 +196,7 @@ def _download(url, path):
 def argoTunnel():
     _download("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64", "cloudflared")
     #shutil.unpack_archive("cloudflared.tgz")
+    os.chmod("./cloudflared", stat.S_IEXEC)
     cfd_proc = subprocess.Popen(
         ["./cloudflared", "tunnel", "--url", "ssh://localhost:22", "--logfile", "cloudflared.log", "--metrics", "localhost:49589"],
         stdout = subprocess.PIPE,
